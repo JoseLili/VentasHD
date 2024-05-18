@@ -1,0 +1,4 @@
+.cards-containter {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 240px);
+}
