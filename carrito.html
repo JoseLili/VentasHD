@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/estilos.css">
+    <title>Carrito de Compras</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="carrito.html">Carrito de Compras</a></li>
+                <li><a href="usuario.html"><img src="path/to/user-image.jpg" alt="Usuario"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container" id="carrito"></div>
+    <div class="total">
+        Total: $<span id="total"></span>
+    </div>
+
+    <script>
+        function cargarCarrito() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "php/obtenerCarrito.php", true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var carrito = JSON.parse(xhr.responseText);
+                    mostrarCarrito(carrito);
+                } else {
+                    console.error("Error al cargar el carrito.");
+                }
+            };
+            xhr.send();
+        }
+
+        function mostrarCarrito(carrito) {
+            var carritoElemento = document.getElementById("carrito");
+            carritoElemento.innerHTML = "";
+            var total = 0;
+            carrito.forEach(function(item, index) {
+                var itemHTML = `
+                    <div class="producto">
+                        <img src="${item.Imagen}" alt="${item.Tipo}">
+                        <div class="contenido">
+                            <h3>${item.Tipo}</h3>
+                            <p>Precio: $${item.Precio}</p>
+                            <p>Cantidad: ${item.cantidad}</p>
+                            <p>${item.Descripcion}</p>
+                        </div>
+                        <button onclick="eliminarProducto(${index})">Eliminar</button>
+                    </div>
+                `;
+                carritoElemento.innerHTML += itemHTML;
+                total += item.Precio * item.cantidad;
+            });
+            document.getElementById("total").innerText = total;
+        }
+
+        function eliminarProducto(index) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "php/eliminarProducto.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Recargar el carrito después de eliminar el producto
+                    cargarCarrito();
+                } else {
+                    console.error("Error al eliminar el producto del carrito.");
+                }
+            };
+            xhr.send("index=" + index);
+        }
+
+        window.onload = function() {
+            cargarCarrito();
+        };
+    </script>
+</body>
+</html>
