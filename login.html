@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
+    <link rel="stylesheet" href="styles/register.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/estilos.css">
-    <title>Iniciar Sesión</title>
+    <title>Registro</title>
 </head>
 <body>
-    <div class="form-container">
-        <a href="registrate.html">registrate</a>
-        <h2>Iniciar Sesión</h2>
-        
+    <img src="assets/logo_yard_sale.svg" alt="LogoYardSale">
+    <h2>Registro de Usuario</h2>
+    <div class="container">
         <form action="php/login.php" method="post">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
@@ -18,6 +16,6 @@
             <input type="password" id="password" name="password" required>
             <button type="submit">Iniciar Sesión</button>
         </form>
-    </div>
+</div>
 </body>
 </html>
