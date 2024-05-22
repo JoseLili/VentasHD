@@ -3,15 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/estilos.css">
     <title>Tienda de Muebles</title>
 </head>
 <body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="carrito.html">Carrito de Compras</a></li>
+                <li><a href="usuario.html"><img src="path/to/user-image.jpg" alt="Usuario"></a></li>
+            </ul>
+            <div id="userInfo">
+                <a href="login.html">Registrate o inicia sesión</a>
+            </div>
+        </nav>
+    </header>
     <div class="container" id="productos"></div>
 
     <script>
         function cargarProductos() {
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "obtener_productos.php", true);
+            xhr.open("GET", "php/obtenerProductos.php", true);
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     var productos = JSON.parse(xhr.responseText);
@@ -35,6 +48,7 @@
                             <p>Precio: $${producto.Precio}</p>
                             <p>Cantidad disponible: ${producto.Cantidad}</p>
                             <p>${producto.Descripcion}</p>
+                            <button onclick="agregarAlCarrito(${producto.idProductos})">Agregar al carrito</button>
                         </div>
                     </div>
                 `;
@@ -42,8 +56,41 @@
             });
         }
 
+        function agregarAlCarrito(idProducto) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "php/agregarAlCarrito.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    alert("Producto agregado al carrito");
+                } else {
+                    console.error("Error al agregar el producto al carrito.");
+                }
+            };
+            xhr.send("idProducto=" + idProducto);
+        }
+
+        function cargarUsuario() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "php/obtenerUsuario.php", true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var respuesta = JSON.parse(xhr.responseText);
+                    if (respuesta.loggedIn) {
+                        document.getElementById("userInfo").innerHTML = `Hola, ${respuesta.nombre}`;
+                    } else {
+                        document.getElementById("userInfo").innerHTML = `<a href="login.html">Registrate o inicia sesión</a>`;
+                    }
+                } else {
+                    console.error("Error al cargar la información del usuario.");
+                }
+            };
+            xhr.send();
+        }
+
         window.onload = function() {
             cargarProductos();
+            cargarUsuario();
         };
     </script>
 </body>
