@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/estilos.css">
+    <title>Checkout</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="carrito.html">Carrito de Compras</a></li>
+                <li><a href="usuario.html"><img src="path/to/user-image.jpg" alt="Usuario"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h2>Checkout</h2>
+        <div id="infoUsuario"></div>
+    </div>
+
+    <script>
+        function cargarInformacionUsuario() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "php/obtenerUsuario.php", true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var usuario = JSON.parse(xhr.responseText);
+                    mostrarInformacionUsuario(usuario);
+                } else {
+                    console.error("Error al cargar la información del usuario.");
+                }
+            };
+            xhr.send();
+        }
+
+        function mostrarInformacionUsuario(usuario) {
+            var infoUsuarioElemento = document.getElementById("infoUsuario");
+            infoUsuarioElemento.innerHTML = "";
+            var infoHTML = `
+                <p>Nombre: ${usuario.Nombre}</p>
+                <p>Correo: ${usuario.Correo}</p>
+                <p>Teléfono: ${usuario.Telefono}</p>
+                <p>Dirección: ${usuario.Direccion}</p>
+            `;
+            infoUsuarioElemento.innerHTML = infoHTML;
+        }
+
+        window.onload = function() {
+            cargarInformacionUsuario();
+        };
+    </script>
+</body>
+</html>
