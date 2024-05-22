@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/estilos.css">
-    <title>Checkout</title>
+    <title>Carrito de Compras</title>
 </head>
 <body>
     <header>
@@ -16,10 +16,27 @@
             </ul>
         </nav>
     </header>
+    <div class="container" id="carrito"></div>
+    <div class="total">
+        Total: $<span id="total"></span>
+    </div>
+    
     <div class="container">
         <h2>Checkout</h2>
         <div id="infoUsuario"></div>
     </div>
+    
+    <form action="php/procesarPago.php" method="POST">
+        <input type="hidden" name="idUsuario" value="<?php echo $_SESSION['idUsuario']; ?>">
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" name="cvv" required><br><br>
+        <label for="tarjeta">Número de Tarjeta:</label>
+        <input type="text" id="tarjeta" name="tarjeta" required><br><br>
+        <label for="titular">Titular:</label>
+        <input type="text" id="titular" name="titular" required><br><br>
+        <p>Total a pagar: $<?php echo $totalCarrito; ?></p>
+        <input type="submit" value="Pagar">
+    </form>
 
     <script>
         function cargarInformacionUsuario() {
@@ -50,6 +67,67 @@
 
         window.onload = function() {
             cargarInformacionUsuario();
+        };
+    </script>
+
+    <script>
+        function cargarCarrito() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "php/obtenerCarrito.php", true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var carrito = JSON.parse(xhr.responseText);
+                    mostrarCarrito(carrito);
+                } else {
+                    console.error("Error al cargar el carrito.");
+                }
+            };
+            xhr.send();
+        }
+
+        function mostrarCarrito(carrito) {
+            var carritoElemento = document.getElementById("carrito");
+            carritoElemento.innerHTML = "";
+            var total = 0;
+            carrito.forEach(function(item, index) {
+                var itemHTML = `
+                    <div class="producto">
+                        <img src="${item.Imagen}" alt="${item.Tipo}">
+                        <div class="contenido">
+                            <h3>${item.Tipo}</h3>
+                            <p>Precio: $${item.Precio}</p>
+                            <p>Cantidad: ${item.cantidad}</p>
+                            <p>${item.Descripcion}</p>
+                            <button onclick="eliminarProducto(${index})">Eliminar del carrito</button>
+                        </div>
+                    </div>
+                `;
+                carritoElemento.innerHTML += itemHTML;
+                total += item.Precio * item.cantidad;
+            });
+            document.getElementById("total").innerText = total;
+        }
+
+        function procederAlCheckout() {
+            window.location.href = "checkout.html";
+        }
+
+        function eliminarProducto(index) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "php/eliminarProducto.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    cargarCarrito();
+                } else {
+                    console.error("Error al eliminar el producto del carrito.");
+                }
+            };
+            xhr.send("index=" + index);
+        }
+
+        window.onload = function() {
+            cargarCarrito();
         };
     </script>
 </body>
