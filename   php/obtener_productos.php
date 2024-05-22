@@ -1,11 +1,12 @@
 <?php
 // Conexión a la base de datos
 $servername = "localhost";
-$database = "u488842232_tienmuebles";
+$database = "u488842232_tienmuebles"; // Esta es la variable correcta
 $username = "u488842232_lili";
 $password = "Emili@no2001";
 
-$conn = new mysqli($servername, $username, $password, $database);
+// Crear conexión
+$conn = new mysqli($servername, $username, $password, $database); // Aquí estaba el error
 
 // Comprobar la conexión
 if ($conn->connect_error) {
