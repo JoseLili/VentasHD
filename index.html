@@ -1,87 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VentasHD</title>
 </head>
 <body>
-    <section class="main-container">
-        <div class="cards-conainer">
-            <div class="product-card">
-                <img src="assets/pexels-photo-276517.jpeg" alt="" class="product-img">
-                <p>$120.00</p>
-                <p>Bike</p>
-                <figure>
-                    <img src="assets/bt_add_to_cart.svg" alt="">
-                </figure>
-            </div>
+    <div class="container">
+        <h1>Tienda de Muebles</h1>
+        <!-- Aquí se mostrará el nombre del usuario (opcional) -->
+        <div id="nombreUsuario"></div>
+        <ul id="productos">
+            <?php
+            // Conexión a la base de datos
+            $servername = "localhost";
+            $username = "tu_usuario";
+            $password = "tu_contraseña";
+            $database = "tu_base_de_datos";
 
-            <div class="product-card">
-                <img src="assets/pexels-photo-276517.jpeg" alt="" class="product-img">
-                <p>$120.00</p>
-                <p>Bike</p>
-                <figure>
-                    <img src="assets/bt_add_to_cart.svg" alt="">
-                </figure>
-            </div>
+            $conn = new mysqli($servername, $username, $password, $database);
 
-            <div class="product-card">
-                <img src="assets/pexels-photo-276517.jpeg" alt="" class="product-img">
-                <p>$120.00</p>
-                <p>Bike</p>
-                <figure>
-                    <img src="assets/bt_add_to_cart.svg" alt="">
-                </figure>
-            </div>
+            // Comprobar la conexión
+            if ($conn->connect_error) {
+                die("Conexión fallida: " . $conn->connect_error);
+            }
 
-            <div class="product-card">
-                <img src="assets/pexels-photo-276517.jpeg" alt="" class="product-img">
-                <p>$120.00</p>
-                <p>Bike</p>
-                <figure>
-                    <img src="assets/bt_add_to_cart.svg" alt="">
-                </figure>
-            </div>
+            // Consulta SQL para obtener los productos
+            $sql = "SELECT * FROM productos";
+            $result = $conn->query($sql);
 
-            <div class="product-card">
-                <img src="assets/pexels-photo-276517.jpeg" alt="" class="product-img">
-                <p>$120.00</p>
-                <p>Bike</p>
-                <figure>
-                    <img src="assets/bt_add_to_cart.svg" alt="">
-                </figure>
-            </div>
+            // Mostrar los productos
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<li class='producto'>";
+                    echo "<img src='" . $row['Imagen'] . "' alt='" . $row['Tipo'] . "'>";
+                    echo "<div class='info'>";
+                    echo "<h3>" . $row['Tipo'] . "</h3>";
+                    echo "<p>Precio: $" . $row['Precio'] . "</p>";
+                    echo "<p>Cantidad disponible: " . $row['Cantidad'] . "</p>";
+                    echo "<p>" . $row['Descripcion'] . "</p>";
+                    echo "</div>";
+                    echo "</li>";
+                }
+            } else {
+                echo "No se encontraron productos.";
+            }
 
-            <div class="product-card">
-                <img src="assets/pexels-photo-276517.jpeg" alt="" class="product-img">
-                <p>$120.00</p>
-                <p>Bike</p>
-                <figure>
-                    <img src="assets/bt_add_to_cart.svg" alt="">
-                </figure>
-            </div>
-
-
-            <div class="product-card">
-                <img src="assets/pexels-photo-276517.jpeg" alt="" class="product-img">
-                <p>$120.00</p>
-                <p>Bike</p>
-                <figure>
-                    <img src="assets/bt_add_to_cart.svg" alt="">
-                </figure>
-            </div>
-
-
-            <div class="product-card">
-                <img src="assets/pexels-photo-276517.jpeg" alt="" class="product-img">
-                <p>$120.00</p>
-                <p>Bike</p>
-                <figure>
-                    <img src="assets/bt_add_to_cart.svg" alt="">
-                </figure>
-            </div>
-        </div>
-    </section>
+            // Cerrar conexión
+            $conn->close();
+            ?>
+        </ul>
+    </div>
 </body>
 </html>
