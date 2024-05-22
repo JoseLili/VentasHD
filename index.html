@@ -6,47 +6,45 @@
     <title>Tienda de Muebles</title>
 </head>
 <body>
-    <div>
-        <h1>Tienda de Muebles</h1>
-        <ul id="productos"></ul>
-    </div>
+    <div class="container" id="productos"></div>
 
     <script>
-    function cargarProductos() {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "php/obtenerProductos.php", true);
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var productos = JSON.parse(xhr.responseText);
-                mostrarProductos(productos);
-            } else {
-                console.error("Error al cargar los productos.");
-            }
+        function cargarProductos() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "obtener_productos.php", true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var productos = JSON.parse(xhr.responseText);
+                    mostrarProductos(productos);
+                } else {
+                    console.error("Error al cargar los productos.");
+                }
+            };
+            xhr.send();
+        }
+
+        function mostrarProductos(productos) {
+            var productosElemento = document.getElementById("productos");
+            productosElemento.innerHTML = "";
+            productos.forEach(function(producto) {
+                var productoHTML = `
+                    <div class="producto">
+                        <img src="${producto.Imagen}" alt="${producto.Tipo}">
+                        <div class="contenido">
+                            <h3>${producto.Tipo}</h3>
+                            <p>Precio: $${producto.Precio}</p>
+                            <p>Cantidad disponible: ${producto.Cantidad}</p>
+                            <p>${producto.Descripcion}</p>
+                        </div>
+                    </div>
+                `;
+                productosElemento.innerHTML += productoHTML;
+            });
+        }
+
+        window.onload = function() {
+            cargarProductos();
         };
-        xhr.send();
-    }
-
-    function mostrarProductos(productos) {
-        var productosElemento = document.getElementById("productos");
-        productosElemento.innerHTML = "";
-        productos.forEach(function(producto) {
-            var productoHTML = `
-                <li>
-                    <h3>${producto.Tipo}</h3>
-                    <p>Precio: $${producto.Precio}</p>
-                    <p>Cantidad disponible: ${producto.Cantidad}</p>
-                    <p>${producto.Descripcion}</p>
-                    <img src="${producto.Imagen}" alt="${producto.Tipo}">
-                </li>
-            `;
-            productosElemento.innerHTML += productoHTML;
-        });
-    }
-
-    window.onload = function() {
-        cargarProductos();
-    };
-</script>
-
+    </script>
 </body>
 </html>
