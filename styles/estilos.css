@@ -103,3 +103,12 @@ header nav ul li img {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin: 20px 0;
 }
+
+a{
+    text-decoration: none;
+    color: white;
+}
+
+a:hover {
+    color: green;
+}
