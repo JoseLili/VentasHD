@@ -18,9 +18,21 @@
     </header>
     <div class="container" id="carrito"></div>
     <div class="total">
+        <h2>Checkout</h2>
         Total: $<span id="total"></span>
     </div>
+    <h3>Direccion De envio</h3>
+    <div id="datosUsuario"></div>
 
+    <h2>Datos Bancarios</h2>
+    <form id="formularioPago">
+        <label for="cv">CV:</label>
+        <input type="text" id="cv" name="cv" required>
+        <label for="tarjeta">Tarjeta Titular:</label>
+        <input type="text" id="tarjeta" name="tarjeta" required>
+    </form>
+    <a class="btnPagar" href="gracias.html">Pagar</a>
+    
     <script>
         function cargarCarrito() {
             var xhr = new XMLHttpRequest();
@@ -59,6 +71,27 @@
             document.getElementById("total").innerText = total;
         }
 
+       function obtenerDatosUsuario() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "php/obtenerUsuario.php", true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var datosUsuario = JSON.parse(xhr.responseText);
+            var datosHTML = `
+                <p>Nombre: ${datosUsuario.Nombre}</p>
+                <p>Correo: ${datosUsuario.Correo}</p>
+                <p>Teléfono: ${datosUsuario.Telefono}</p>
+                <p>Dirección: ${datosUsuario.Direccion}</p>
+            `;
+            document.getElementById("datosUsuario").innerHTML = datosHTML;
+        } else {
+            console.error("Error al cargar los datos del usuario.");
+        }
+    };
+    xhr.send();
+}
+
+
         function procederAlCheckout() {
             window.location.href = "checkout.html";
         }
@@ -79,7 +112,10 @@
 
         window.onload = function() {
             cargarCarrito();
+            obtenerDatosUsuario();
         };
+        
+        
     </script>
 </body>
 </html>

@@ -116,3 +116,12 @@ a{
 a:hover {
     color: green;
 }
+
+form {
+    width: 300px; /* Ancho del formulario */
+    margin-bottom: 20px; /* Espacio entre el formulario y los datos del cliente */
+}
+
+#datosUsuario {
+    width: 300px; /* Ancho de la sección de datos del usuario */
+}
