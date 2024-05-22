@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="styles/estilos.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="carrito.html">Carrito de Compras</a></li>
+            <li><a href="php/logout.php">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Perfil de Usuario</h1>
+        <div id="user-info">
+            <!-- Aquí se mostrará la información del usuario -->
+        </div>
+    </div>
+
+    <script>
+        // Al cargar la página, se obtiene la información del usuario mediante una solicitud AJAX
+        window.onload = function() {
+            var userInfoElement = document.getElementById('user-info');
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'php/obtener_usuario.php', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    userInfoElement.innerHTML = xhr.responseText;
+                } else {
+                    console.error('Error al cargar la información del usuario.');
+                }
+            };
+            xhr.send();
+        };
+    </script>
+</body>
+</html>
