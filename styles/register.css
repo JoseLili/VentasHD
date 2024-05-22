@@ -41,3 +41,18 @@ img{
     padding-top: 5%;
     width: 20%;
 }
+
+a{
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: red;
+}
+
+button {
+    text-decoration: none;
+    margin-top: 10px;
+    border-radius: 15px;
+} 
