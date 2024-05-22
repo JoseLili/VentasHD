@@ -125,3 +125,12 @@ form {
 #datosUsuario {
     width: 300px; /* Ancho de la sección de datos del usuario */
 }
+
+
+.btnPagar {
+    border-radius: 10px;
+    padding: 5px;
+    border: 5px solid;
+    font-size: 1.5em;
+    color: black;
+}
