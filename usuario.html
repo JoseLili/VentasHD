@@ -3,38 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario</title>
     <link rel="stylesheet" href="styles/estilos.css">
+    <title>Checkout</title>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="carrito.html">Carrito de Compras</a></li>
-            <li><a href="php/logout.php">Cerrar Sesión</a></li>
-        </ul>
-    </nav>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="carrito.html">Carrito de Compras</a></li>
+                <li><a href="php/logout.php">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
     <div class="container">
-        <h1>Perfil de Usuario</h1>
-        <div id="user-info">
-            <!-- Aquí se mostrará la información del usuario -->
-        </div>
+        <h2>Informacion de cuenta:</h2>
+        <div id="infoUsuario"></div>
     </div>
 
     <script>
-        // Al cargar la página, se obtiene la información del usuario mediante una solicitud AJAX
-        window.onload = function() {
-            var userInfoElement = document.getElementById('user-info');
+        function cargarInformacionUsuario() {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'php/obtener_usuario.php', true);
+            xhr.open("GET", "php/obtenerUsuario.php", true);
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    userInfoElement.innerHTML = xhr.responseText;
+                    var usuario = JSON.parse(xhr.responseText);
+                    mostrarInformacionUsuario(usuario);
                 } else {
-                    console.error('Error al cargar la información del usuario.');
+                    console.error("Error al cargar la información del usuario.");
                 }
             };
             xhr.send();
+        }
+
+        function mostrarInformacionUsuario(usuario) {
+            var infoUsuarioElemento = document.getElementById("infoUsuario");
+            infoUsuarioElemento.innerHTML = "";
+            var infoHTML = `
+                <p>Hola:  ${usuario.Nombre}</p>
+                <p>Correo: ${usuario.Correo}</p>
+                <p>Teléfono: ${usuario.Telefono}</p>
+                <p>Dirección: ${usuario.Direccion}</p>
+            `;
+            infoUsuarioElemento.innerHTML = infoHTML;
+        }
+
+        window.onload = function() {
+            cargarInformacionUsuario();
         };
     </script>
 </body>
