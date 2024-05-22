@@ -3,53 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VentasHD</title>
+    <title>Tienda de Muebles</title>
 </head>
 <body>
-    <div class="container">
+    <div>
         <h1>Tienda de Muebles</h1>
-        <!-- Aquí se mostrará el nombre del usuario (opcional) -->
-        <div id="nombreUsuario"></div>
-        <ul id="productos">
-            <?php
-            // Conexión a la base de datos
-            $servername = "localhost";
-            $username = "tu_usuario";
-            $password = "tu_contraseña";
-            $database = "tu_base_de_datos";
-
-            $conn = new mysqli($servername, $username, $password, $database);
-
-            // Comprobar la conexión
-            if ($conn->connect_error) {
-                die("Conexión fallida: " . $conn->connect_error);
-            }
-
-            // Consulta SQL para obtener los productos
-            $sql = "SELECT * FROM productos";
-            $result = $conn->query($sql);
-
-            // Mostrar los productos
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<li class='producto'>";
-                    echo "<img src='" . $row['Imagen'] . "' alt='" . $row['Tipo'] . "'>";
-                    echo "<div class='info'>";
-                    echo "<h3>" . $row['Tipo'] . "</h3>";
-                    echo "<p>Precio: $" . $row['Precio'] . "</p>";
-                    echo "<p>Cantidad disponible: " . $row['Cantidad'] . "</p>";
-                    echo "<p>" . $row['Descripcion'] . "</p>";
-                    echo "</div>";
-                    echo "</li>";
-                }
-            } else {
-                echo "No se encontraron productos.";
-            }
-
-            // Cerrar conexión
-            $conn->close();
-            ?>
-        </ul>
+        <ul id="productos"></ul>
     </div>
+
+    <script>
+        function cargarProductos() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "php/obtener_productos.php", true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var productos = JSON.parse(xhr.responseText);
+                    mostrarProductos(productos);
+                } else {
+                    console.error("Error al cargar los productos.");
+                }
+            };
+            xhr.send();
+        }
+
+        function mostrarProductos(productos) {
+            var productosElemento = document.getElementById("productos");
+            productosElemento.innerHTML = "";
+            productos.forEach(function(producto) {
+                var productoHTML = `
+                    <li>
+                        ${producto.Tipo}: $${producto.Precio}, Cantidad: ${producto.Cantidad}, ${producto.Descripcion}
+                    </li>
+                `;
+                productosElemento.innerHTML += productoHTML;
+            });
+        }
+
+        window.onload = function() {
+            cargarProductos();
+        };
+    </script>
 </body>
 </html>
