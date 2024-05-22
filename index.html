@@ -12,36 +12,41 @@
     </div>
 
     <script>
-        function cargarProductos() {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "php/obtener_productos.php", true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    var productos = JSON.parse(xhr.responseText);
-                    mostrarProductos(productos);
-                } else {
-                    console.error("Error al cargar los productos.");
-                }
-            };
-            xhr.send();
-        }
-
-        function mostrarProductos(productos) {
-            var productosElemento = document.getElementById("productos");
-            productosElemento.innerHTML = "";
-            productos.forEach(function(producto) {
-                var productoHTML = `
-                    <li>
-                        ${producto.Tipo}: $${producto.Precio}, Cantidad: ${producto.Cantidad}, ${producto.Descripcion}
-                    </li>
-                `;
-                productosElemento.innerHTML += productoHTML;
-            });
-        }
-
-        window.onload = function() {
-            cargarProductos();
+    function cargarProductos() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "php/obtenerProductos.php", true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var productos = JSON.parse(xhr.responseText);
+                mostrarProductos(productos);
+            } else {
+                console.error("Error al cargar los productos.");
+            }
         };
-    </script>
+        xhr.send();
+    }
+
+    function mostrarProductos(productos) {
+        var productosElemento = document.getElementById("productos");
+        productosElemento.innerHTML = "";
+        productos.forEach(function(producto) {
+            var productoHTML = `
+                <li>
+                    <h3>${producto.Tipo}</h3>
+                    <p>Precio: $${producto.Precio}</p>
+                    <p>Cantidad disponible: ${producto.Cantidad}</p>
+                    <p>${producto.Descripcion}</p>
+                    <img src="${producto.Imagen}" alt="${producto.Tipo}">
+                </li>
+            `;
+            productosElemento.innerHTML += productoHTML;
+        });
+    }
+
+    window.onload = function() {
+        cargarProductos();
+    };
+</script>
+
 </body>
 </html>
