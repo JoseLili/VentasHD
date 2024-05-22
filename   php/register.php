@@ -1,11 +1,10 @@
-<?php
 $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "tienmuebles";
+$database = "u488842232_tienmuebles"; // Esta es la variable correcta
+$username = "u488842232_lili";
+$password = "Emili@no2001";
 
 // Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $database); // Aquí estaba el error
 
 // Revisar conexión
 if ($conn->connect_error) {
@@ -30,4 +29,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $conn->close();
-?>
